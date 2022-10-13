@@ -6,7 +6,7 @@ import renderWithRouterAndRedux from "./helpers/renderWithRouterAndRedux";
 
 it('', async() => {
   jest.spyOn(global, 'fetch').mockImplementation(fetch);
-
+  
     // Acessa o jogo
   const { history } = renderWithRouterAndRedux(<App />)
 
@@ -87,7 +87,7 @@ it('', async() => {
 
 it('', async() => {
   jest.spyOn(global, 'fetch').mockImplementation(fetch);
-
+  
     // Acessa o jogo
   const { history } = renderWithRouterAndRedux(<App />)
 
@@ -127,4 +127,88 @@ it('', async() => {
 
   await screen.findByText(/Play Again/i);
   expect(history.location.pathname).toBe('/Feedback');
+})
+
+it('', async() => {
+  jest.spyOn(global, 'fetch').mockImplementation(fetch);
+  const ranking = [{ "name": "Teste", "score": 39 }, { "name": "Teste", "score": 660 },{ "name": "Teste", "score": 110 }, { "name": "Teste", "score": 110 }];
+
+  localStorage.setItem('ranking', JSON.stringify(ranking));
+    // Acessa o jogo
+  const { history } = renderWithRouterAndRedux(<App />)
+
+  let inputEmail = screen.getByTestId("input-gravatar-email");
+  let inputName = screen.getByTestId("input-player-name");
+  let btnPlay = screen.getByTestId("btn-play");
+  userEvent.type(inputEmail, 'teste@teste.com');
+  userEvent.type(inputName, 'teste');
+  userEvent.click(btnPlay)
+
+  await waitFor(() => expect(screen.getByText("In quantum physics, which of these theorised sub-atomic particles has yet to be observed?")).toBeInTheDocument());
+  
+  let btnCorrectAnswer = screen.getByTestId("correct-answer");
+  userEvent.click(btnCorrectAnswer);
+  let btnNext = screen.getByTestId("btn-next");
+  userEvent.click(btnNext);
+
+  btnCorrectAnswer = screen.getByTestId("correct-answer");
+  userEvent.click(btnCorrectAnswer);
+  btnNext = screen.getByTestId("btn-next");
+  userEvent.click(btnNext);
+
+  btnCorrectAnswer = screen.getByTestId("correct-answer");
+  userEvent.click(btnCorrectAnswer);
+  btnNext = screen.getByTestId("btn-next");
+  userEvent.click(btnNext);
+
+  btnCorrectAnswer = screen.getByTestId("correct-answer");
+  userEvent.click(btnCorrectAnswer);
+  btnNext = screen.getByTestId("btn-next");
+  userEvent.click(btnNext);
+
+  btnCorrectAnswer = screen.getByTestId("correct-answer");
+  userEvent.click(btnCorrectAnswer);
+  btnNext = screen.getByTestId("btn-next");
+  userEvent.click(btnNext);
+
+  await screen.findByText(/Play Again/i);
+  expect(history.location.pathname).toBe('/Feedback');
+})
+
+it('', async() => {
+  jest.spyOn(global, 'fetch').mockImplementation(fetch);
+  
+    // Acessa o jogo
+  const { history } = renderWithRouterAndRedux(<App />)
+
+  let inputEmail = screen.getByTestId("input-gravatar-email");
+  let inputName = screen.getByTestId("input-player-name");
+  let btnPlay = screen.getByTestId("btn-play");
+  userEvent.type(inputEmail, 'teste@teste.com');
+  userEvent.type(inputName, 'teste');
+  userEvent.click(btnPlay)
+  localStorage.setItem('token', "INVALID_TOKEN");
+  await waitFor(() => expect(screen.getByText("In quantum physics, which of these theorised sub-atomic particles has yet to be observed?")).toBeInTheDocument());
+  
+  let btnIncorrectAnswer = screen.getAllByTestId("wrong-answer-0")[0];
+  userEvent.click(btnIncorrectAnswer);
+  btnIncorrectAnswer = screen.getAllByTestId("wrong-answer-0")[0];
+  expect(btnIncorrectAnswer).toHaveClass('incorrect');
+})
+
+it('', async() => {
+  localStorage.setItem('token', "INVALID_TOKEN");
+  jest.spyOn(global, 'fetch').mockImplementation(fetch);
+  const INITIAL_STATE = {
+    player: {
+      email: 'leokepler@gmail.com',
+      name: 'Leonardo Kepler',
+      score: 0,
+      assertions: 0,
+    }
+  }
+    // Acessa o jogo
+  const { history } = renderWithRouterAndRedux(<App />, INITIAL_STATE, '/game');
+
+  await waitFor(() => { expect(history.location.pathname).toBe('/');})
 })
